@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpendWise — Personal Wealth &amp; Expense Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark">₹</span>
+      <div class="brand-text">
+        <h1>SpendWise</h1>
+        <p>Personal Wealth &amp; Expense Tracker</p>
+      </div>
+    </div>
+    <form id="budget-form" class="budget-form">
+      <label for="budget-input">Monthly budget</label>
+      <input type="number" id="budget-input" min="0" step="0.01" placeholder="e.g. 20000">
+      <button type="submit">Set</button>
+    </form>
+  </div>
+  <div class="ledger-stitch" aria-hidden="true"></div>
+</header>
+
+<div id="budget-banner" class="budget-banner">
+  <div class="budget-bar"><div id="budget-bar-fill" class="budget-bar-fill"></div></div>
+  <span id="budget-text"></span>
+</div>
+
+<main class="layout">
+
+  <!-- LEFT COLUMN -->
+  <section class="col col-main">
+
+    <div class="card">
+      <h2 class="card-title">Add a transaction</h2>
+      <form id="txn-form" class="txn-form">
+        <div class="field">
+          <label for="f-date">Date</label>
+          <input type="date" id="f-date" required>
+        </div>
+        <div class="field">
+          <label for="f-type">Type</label>
+          <select id="f-type">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-category">Category</label>
+          <input type="text" id="f-category" placeholder="Food, Rent, Salary…" required>
+        </div>
+        <div class="field">
+          <label for="f-amount">Amount (₹)</label>
+          <input type="number" id="f-amount" min="0.01" step="0.01" placeholder="0.00" required>
+        </div>
+        <div class="field field-wide">
+          <label for="f-note">Note</label>
+          <input type="text" id="f-note" placeholder="Optional detail">
+        </div>
+        <button type="submit" class="btn btn-primary">Add transaction</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title-row">
+        <h2 class="card-title">Transactions</h2>
+        <div class="table-controls">
+          <label for="sort-select" class="sr-label">Sort</label>
+          <select id="sort-select">
+            <option value="none">Insertion order (linked list)</option>
+            <option value="date-desc">Date — newest first</option>
+            <option value="date-asc">Date — oldest first</option>
+            <option value="amount-desc">Amount — high to low</option>
+            <option value="amount-asc">Amount — low to high</option>
+          </select>
+          <button id="undo-btn" class="btn btn-ghost" disabled>Undo last action</button>
+        </div>
+      </div>
+
+      <form id="search-form" class="search-form">
+        <label for="search-date" class="sr-label">Search by date</label>
+        <input type="date" id="search-date">
+        <button type="submit" class="btn btn-ghost">Search</button>
+      </form>
+      <p id="search-note" class="search-note"></p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Type</th><th>Category</th><th>Amount</th><th>Note</th><th></th></tr>
+          </thead>
+          <tbody id="txn-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- RIGHT COLUMN -->
+  <aside class="col col-side">
+
+    <div class="card stat-card">
+      <div class="stat">
+        <span class="stat-label">Total income</span>
+        <span class="stat-value credit">₹<span id="stat-income">0.00</span></span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Total expense</span>
+        <span class="stat-value debit">₹<span id="stat-expense">0.00</span></span>
+      </div>
+      <div class="stat stat-balance">
+        <span class="stat-label">Balance</span>
+        <span class="stat-value">₹<span id="stat-balance">0.00</span></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Category report</h2>
+      <p class="card-sub">Built with a binary search tree, traversed inorder for an A–Z ledger.</p>
+      <div id="category-report" class="category-report"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title-row">
+        <h2 class="card-title">Top expenses</h2>
+        <select id="top-n">
+          <option value="3">Top 3</option>
+          <option value="5" selected>Top 5</option>
+          <option value="10">Top 10</option>
+        </select>
+      </div>
+      <p class="card-sub">Pulled off a binary max-heap, one at a time.</p>
+      <div id="top-expenses" class="top-expenses"></div>
+    </div>
+
+  </aside>
+
+</main>
+
+<footer class="app-footer">
+  <p>Data structures at work: doubly linked list · binary search tree · hash map · stack · merge sort · binary search · max-heap. Data persists to this browser via localStorage.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
